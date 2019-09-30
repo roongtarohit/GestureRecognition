@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gesture_array">
+        <item>CHOOSE A GESTURE</item>
+        <item>Buy</item>
+        <item>House</item>
+        <item>Fun</item>
+        <item>Hope</item>
+        <item>Arrive</item>
+        <item>Really</item>
+        <item>Read</item>
+        <item>Lip</item>
+        <item>Mouth</item>
+        <item>Some</item>
+        <item>Communicate</item>
+        <item>Write</item>
+        <item>Create</item>
+        <item>Pretend</item>
+        <item>Sister</item>
+        <item>Man</item>
+        <item>One</item>
+        <item>Drive</item>
+        <item>Perfect</item>
+        <item>Mother</item>
+    </string-array>
+</resources>
