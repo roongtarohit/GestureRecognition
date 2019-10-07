@@ -1,13 +1,16 @@
 package com.example.gesturerecognition1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
@@ -19,6 +22,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -26,6 +31,8 @@ public class RecordActivity extends AppCompatActivity {
     VideoView gestureVideo;
     public static final String PRACTISE_VIDEO = "selectedGesture";
     String selectedGesture;
+    private File newFile;
+    private static Uri locuri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +67,28 @@ public class RecordActivity extends AppCompatActivity {
 
     private void dispatchTakeVideoIntent() {
 
+        // path To video directory
+        //Path is Android/data/com.example.gesturerecognition1/files/DCIM/
+        File videoPath = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+        
+        // create an mp4 at this path
+        File videoFile = new File(videoPath, "ROONGTA.mp4");
 
-        File mediaFile = new File((Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES) + File.separator +
-                "ROONGTA" + ".mp4"));
+        //get Uri for the videoFile [authority is defined in the manifest]
+        // geApplicationContext().getPackageName() give "com.example.gesturerecognition1" therefore we append .provider
+        Uri videoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", videoFile);
 
-        //Toast.makeText(getApplicationContext(),path.toString(),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),videoUri.toString(), Toast.LENGTH_LONG).show();
+
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+
+        // Where do I want to place the video
+        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+
+        //pass permission to the camera
+        takeVideoIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(mediaFile));
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
@@ -77,6 +97,7 @@ public class RecordActivity extends AppCompatActivity {
         if (requestCode == REQUEST_VIDEO_CAPTURE)  {
             if (resultCode == RESULT_OK){
                 Uri videoUri = intent.getData();
+                Toast.makeText(getApplicationContext(),videoUri.toString(), Toast.LENGTH_LONG).show();
                 gestureVideo.setVideoURI(videoUri);
                 gestureVideo.setMediaController(new MediaController(this));
                 gestureVideo.requestFocus();
@@ -91,9 +112,5 @@ public class RecordActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
 
 }
