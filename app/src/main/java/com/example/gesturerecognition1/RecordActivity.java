@@ -31,6 +31,8 @@ public class RecordActivity extends AppCompatActivity {
     public static final String PRACTISE_VIDEO = "selectedGesture";
     public static final String VIDEO_NAME = "videoName";
     public static final String ASU_ID = "asuID";
+    public static final String groupID = "25";
+    public static final String accept = "1";
     String selectedGesture, videoName, asuID;
 
     //public static final String UPLOAD_URL = "http://10.218.107.121/cse535/upload_video.php";
@@ -131,24 +133,12 @@ public class RecordActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            String lineEnd = "\r\n";
-            String twoHyphens = "--";
-            String boundary = "*****";
+            String delimiter = "\r\n";
+            String hyphens = "--";
+            String split = "*****";
 
             File videoPath = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-            File videoFile = new File(videoPath, videoName);
 
-
-
-            //File SDCardRoot = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-            //File directory = new File(SDCardRoot, "/my_output_folder/"); //create directory to keep your downloaded file
-            //final String fileName = "buy" + ".mp4";
-
-            //final String fileName = selectedGesture + "_PRACTICE_" + "_" + ".mp4";
-
-            final String group_id = "25";
-            final String id = asuID;
-            final String accept = "1";
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
             int maxBufferSize = 1024 * 1024;
@@ -166,55 +156,46 @@ public class RecordActivity extends AppCompatActivity {
                     urlConnection.setRequestMethod("POST");
                     urlConnection.setRequestProperty("Connection", "Keep-Alive");
                     urlConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
-                    urlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                    //urlConnection.setRequestProperty("uploaded_file", "ROONGTA.mp4");
-                    //urlConnection.setRequestProperty("group_id", "21");
-                    //urlConnection.setRequestProperty("id","123");
-                    //urlConnection.setRequestProperty("accept","1");
+                    urlConnection.setRequestProperty("Content-Type", "multipart/form-data;split=" + split);
 
                     DataOutputStream dos = new DataOutputStream(urlConnection.getOutputStream());
 
 
+                    //ADDING GROUP ID IN HEADER
+                    dos.writeBytes(hyphens + split + delimiter);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"groupID\"" + delimiter);
+                    dos.writeBytes(delimiter);
+                    dos.writeBytes(groupID);
+                    dos.writeBytes(delimiter);
+                    dos.writeBytes(hyphens + split + delimiter);
 
-                    //group_id
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"group_id\"" + lineEnd);
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(group_id);
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-
-                    //id
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"id\"" + lineEnd);
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(id);
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    //ADDING ASU ID ID IN HEADER
+                    dos.writeBytes(hyphens + split + delimiter);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"asuID\"" + delimiter);
+                    dos.writeBytes(delimiter);
+                    dos.writeBytes(asuID);
+                    dos.writeBytes(delimiter);
+                    dos.writeBytes(hyphens + split + delimiter);
 
 
-                    //accept
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"accept\"" + lineEnd);
-                    dos.writeBytes(lineEnd);
+                    //ADDING ACCEPT IN HEADER
+                    dos.writeBytes(hyphens + split + delimiter);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"accept\"" + delimiter);
+                    dos.writeBytes(delimiter);
                     dos.writeBytes(accept);
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes(delimiter);
+                    dos.writeBytes(hyphens + split + delimiter);
 
-                    //video
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=" + videoName +  lineEnd);
-                    dos.writeBytes(lineEnd);
-
-
+                    //ADDING VIDEO IN HEADER
+                    dos.writeBytes(hyphens + split + delimiter);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=" + videoName +  delimiter);
+                    dos.writeBytes(delimiter);
 
                     bytesAvailable = input.available();
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
                     buffer = new byte[bufferSize];
-
-
-
                     bytesRead = input.read(buffer, 0, bufferSize);
+
                     while (bytesRead > 0) {
                         dos.write(buffer, 0, bufferSize);
                         bytesAvailable = input.available();
@@ -223,8 +204,8 @@ public class RecordActivity extends AppCompatActivity {
                     }
 
 
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                    dos.writeBytes(delimiter);
+                    dos.writeBytes(hyphens + split + hyphens + delimiter);
 
                     int serverResponseCode = urlConnection.getResponseCode();
 
@@ -233,9 +214,7 @@ public class RecordActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), serverResponseCode, Toast.LENGTH_LONG).show();
                     String serverResponseMessage = urlConnection.getResponseMessage();
 
-
-
-                    Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + " : " + serverResponseCode);
+                    Log.i("CHECKPOINT : ", "HTTP Response is : " + serverResponseMessage + " : " + serverResponseCode);
 
 
                     if (serverResponseCode == 200) {
@@ -243,9 +222,7 @@ public class RecordActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("uploadFile2","File upload complete");
-                                String msg = "File Upload Completed.\n\n See uploaded file here : \n\n" + " http://www.androidexample.com/media/uploads/" + videoName;
-                                Toast.makeText(getApplicationContext(), "File Upload Complete", Toast.LENGTH_LONG).show();
+                                Log.i("CHECKPOINT : ","File upload complete");
                             }
                         });
                     }
@@ -259,13 +236,13 @@ public class RecordActivity extends AppCompatActivity {
                 }
                 catch (Exception exception)
                 {
-                    Log.d("Error1", String.valueOf(exception));
+                    Log.d("Exception : ", String.valueOf(exception));
                     publishProgress(String.valueOf(exception));
                 }
             }
             catch (Exception exception)
             {
-                Log.d("Error2", String.valueOf(exception));
+                Log.d("Exception : ", String.valueOf(exception));
                 publishProgress(String.valueOf(exception));
             }
             return "null";
@@ -273,14 +250,12 @@ public class RecordActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(String... text){
-            Toast.makeText(getApplicationContext(), "In Background Task" + text[0], Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "In Background Task" + text[0], Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected void onPostExecute(String text){
-            Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
-            //Intent intent3 = new Intent(Main3Activity.this, MainActivity.class);
-            //startActivity(intent3);
+            Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
         }
     }
 }
