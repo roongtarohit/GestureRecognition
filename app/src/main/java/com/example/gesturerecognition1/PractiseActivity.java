@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -18,7 +19,10 @@ import java.net.URI;
 public class PractiseActivity extends AppCompatActivity {
 
     public static final String PRACTISE_VIDEO = "selectedGesture";
+    public static final String VIDEO_NAME = "videoName";
+    public static final String ASU_ID = "asuID";
     String selectedGesture;
+    String asuID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,8 @@ public class PractiseActivity extends AppCompatActivity {
 
         Button backToMain = (Button) findViewById(R.id.backToMain);
         Button record = (Button)  findViewById(R.id.record);
+        final EditText videoTextName = (EditText) findViewById(R.id.videoEditText);
+        final EditText asuID = (EditText) findViewById(R.id.asuID);
 
         String practiseVideoName, practiseVideoFile;
 
@@ -74,10 +80,17 @@ public class PractiseActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"NO CAMERA", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
-                    intent.putExtra(PRACTISE_VIDEO, selectedGesture);
-                    finish();
-                    startActivity(intent);
+                    if(videoTextName.getText().length() == 0 || asuID.getText().length() == 0){
+                        Toast.makeText(getApplicationContext(),"ENTER THE VIDEO NAME and ASU ID", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
+                        intent.putExtra(PRACTISE_VIDEO, selectedGesture);
+                        intent.putExtra(VIDEO_NAME,videoTextName.getText().toString());
+                        intent.putExtra(ASU_ID, asuID.getText().toString());
+                        finish();
+                        startActivity(intent);
+                    }
                 }
             }
         });

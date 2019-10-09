@@ -29,7 +29,9 @@ public class RecordActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
     VideoView gestureVideo;
     public static final String PRACTISE_VIDEO = "selectedGesture";
-    String selectedGesture;
+    public static final String VIDEO_NAME = "videoName";
+    public static final String ASU_ID = "asuID";
+    String selectedGesture, videoName, asuID;
 
     //public static final String UPLOAD_URL = "http://10.218.107.121/cse535/upload_video.php";
 
@@ -47,6 +49,8 @@ public class RecordActivity extends AppCompatActivity {
             selectedGesture = null;
         } else {
             selectedGesture = extras.getString(PRACTISE_VIDEO).toLowerCase();
+            videoName = selectedGesture.toUpperCase() + "_PRACTISE_" + extras.getString(VIDEO_NAME).toLowerCase() + ".mp4";
+            asuID = extras.getString(ASU_ID);
         }
 
         dispatchTakeVideoIntent();
@@ -79,7 +83,7 @@ public class RecordActivity extends AppCompatActivity {
         File videoPath = getExternalFilesDir(Environment.DIRECTORY_DCIM);
 
         // create an mp4 at this path
-        File videoFile = new File(videoPath, "ROONGTA.mp4");
+        File videoFile = new File(videoPath, videoName);
 
         Toast.makeText(getApplicationContext(),"THIS ******* " + videoFile.toString(), Toast.LENGTH_LONG).show();
 
@@ -127,16 +131,14 @@ public class RecordActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            Log.d("CHUTIYA1","caca");
-
             String lineEnd = "\r\n";
             String twoHyphens = "--";
             String boundary = "*****";
 
             File videoPath = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-            File videoFile = new File(videoPath, "ROONGTA.mp4");
+            File videoFile = new File(videoPath, videoName);
 
-            Log.d("CHUTIYA1",videoFile.toString());
+
 
             //File SDCardRoot = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
             //File directory = new File(SDCardRoot, "/my_output_folder/"); //create directory to keep your downloaded file
@@ -145,17 +147,17 @@ public class RecordActivity extends AppCompatActivity {
             //final String fileName = selectedGesture + "_PRACTICE_" + "_" + ".mp4";
 
             final String group_id = "25";
-            final String id = "123";
+            final String id = asuID;
             final String accept = "1";
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
             int maxBufferSize = 1024 * 1024;
             try {
-                FileInputStream input = new FileInputStream(new File(videoPath, "ROONGTA.mp4"));
+                FileInputStream input = new FileInputStream(new File(videoPath, videoName));
 
                 try {
 
-                    URL url = new URL("http://192.168.0.24/GestureRecognition/upload_video.php");
+                    URL url = new URL("http://10.218.107.121/cse535/upload_video.php");
 
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setDoInput(true); // Allow Inputs
@@ -165,10 +167,10 @@ public class RecordActivity extends AppCompatActivity {
                     urlConnection.setRequestProperty("Connection", "Keep-Alive");
                     urlConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
                     urlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                    urlConnection.setRequestProperty("uploaded_file", "ROONGTA.mp4");
-                    urlConnection.setRequestProperty("group_id", "21");
-                    urlConnection.setRequestProperty("id","123");
-                    urlConnection.setRequestProperty("accept","1");
+                    //urlConnection.setRequestProperty("uploaded_file", "ROONGTA.mp4");
+                    //urlConnection.setRequestProperty("group_id", "21");
+                    //urlConnection.setRequestProperty("id","123");
+                    //urlConnection.setRequestProperty("accept","1");
 
                     DataOutputStream dos = new DataOutputStream(urlConnection.getOutputStream());
 
@@ -201,7 +203,7 @@ public class RecordActivity extends AppCompatActivity {
 
                     //video
                     dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=" + "ROONGTA.mp4" +  lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=" + videoName +  lineEnd);
                     dos.writeBytes(lineEnd);
 
 
@@ -242,7 +244,7 @@ public class RecordActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Log.i("uploadFile2","File upload complete");
-                                String msg = "File Upload Completed.\n\n See uploaded file here : \n\n" + " http://www.androidexample.com/media/uploads/" + "ROONGTA.mp4";
+                                String msg = "File Upload Completed.\n\n See uploaded file here : \n\n" + " http://www.androidexample.com/media/uploads/" + videoName;
                                 Toast.makeText(getApplicationContext(), "File Upload Complete", Toast.LENGTH_LONG).show();
                             }
                         });

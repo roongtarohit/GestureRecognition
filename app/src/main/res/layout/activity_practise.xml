@@ -52,4 +52,24 @@
         android:text="BACK"
         android:layout_below="@+id/record" />
 
+    <EditText
+        android:id="@+id/videoEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/backToMain"
+        android:hint="(Practice Number)_USERLASTNAME"
+        />
+
+    <EditText
+        android:id="@+id/asuID"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/videoEditText"
+        android:hint="Enter ASU ID"
+        />
+
 </RelativeLayout>
