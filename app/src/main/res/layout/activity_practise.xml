@@ -1,75 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PractiseActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Gesture Recognition Application!"
-        android:layout_marginTop="10dp"
-        android:textSize="20dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/intro"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/intro"
-        android:id="@+id/practiseLayout">
+        android:layout_height="match_parent">
 
-        <VideoView
-            android:layout_marginTop="20dp"
-            android:id="@+id/practiseVideo"
+        <ImageView
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:alpha="0.5">
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/intro"
-            android:layout_alignParentBottom="true" />
+            android:text="Gesture Recognition Application!"
+            android:layout_marginTop="20dp"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:fontFamily="sans-serif-black"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/intro"/>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@+id/intro"
+                android:id="@+id/practiseLayout">
+
+                <VideoView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/practiseVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/intro"
+                    android:layout_alignParentBottom="true" />
+
+            </LinearLayout>
 
 
-    <Button
-        android:id="@+id/record"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/practiseLayout"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:text="RECORD" />
+            <Button
+                android:id="@+id/record"
+                android:alpha="0.5"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/practiseLayout"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:text="RECORD" />
 
-    <Button
-        android:id="@+id/backToMain"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:text="BACK"
-        android:layout_below="@+id/record" />
+            <Button
+                android:id="@+id/backToMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:alpha="0.5"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:text="BACK"
+                android:layout_below="@+id/record" />
 
-    <EditText
-        android:id="@+id/videoEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/backToMain"
-        android:hint="(Practice Number)_USERLASTNAME"
-        />
+            <EditText
+                android:id="@+id/videoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/backToMain"
+                android:hint="(Practice Number)_USERLASTNAME"
+                />
 
-    <EditText
-        android:id="@+id/asuID"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/videoEditText"
-        android:hint="Enter ASU ID"
-        />
-
-</RelativeLayout>
+            <EditText
+                android:id="@+id/asuID"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/videoEditText"
+                android:hint="Enter ASU ID"
+                />
+    </RelativeLayout>
+</ScrollView>
